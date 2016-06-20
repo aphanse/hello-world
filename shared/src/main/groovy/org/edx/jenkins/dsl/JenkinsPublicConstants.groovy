@@ -1,6 +1,6 @@
-//package org.edx.jenkins.dsl
+package org.edx.jenkins.dsl
 
-//import org.yaml.snakeyaml.Yaml
+import org.yaml.snakeyaml.Yaml
 
 class JenkinsPublicConstants {
   
