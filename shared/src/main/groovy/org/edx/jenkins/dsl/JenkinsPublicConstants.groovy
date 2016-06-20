@@ -69,14 +69,14 @@ class JenkinsPublicConstants {
 
     /* Parse data out of the Jenkins secret file referenced with env var "secretFileVariable" */
     /* Secret files are in YAML format, so parse their k:v into a a Map */
-/*    public static final Closure JENKINS_PUBLIC_PARSE_SECRET = { secretFileVariable, envVarsMap, out ->
+    public static final Closure JENKINS_PUBLIC_PARSE_SECRET = { secretFileVariable, envVarsMap, out ->
         def secretMap = [:]
         String fileContents = new File(envVarsMap[secretFileVariable]).text
         Yaml yaml = new Yaml()
         secretMap = yaml.load(fileContents)
         return secretMap
     }
-*/    
+    
     public static final String JENKINS_PUBLIC_JUNIT_REPORTS = 'edx-platform/**/nosetests.xml,edx-platform/reports/acceptance/*.xml,' +
                                                               'edx-platform/reports/quality.xml,edx-platform/reports/javascript/' +
                                                               'javascript_xunit.xml,edx-platform/reports/bok_choy/xunit.xml,edx-platform/' +
