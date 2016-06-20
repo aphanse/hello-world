@@ -11,20 +11,9 @@ buildFlowJob('edx-platform-bok-choy-pr-TESTING') {
     label('flow-worker-bokchoy') //restrict to flow-worker-bokchoy
     checkoutRetryCount(5)
     multiscm {
-        git { //using git on the branch and url, clean before checkout
-            remote {
-                github('edx/testeng-ci')
-            }
-            branch('*/master')
-            browser()
-            extensions {
-                relativeTargetDirectory('testeng-ci')
-                cleanBeforeCheckout()
-            }
-        }
         git { //using git on the branch and url, clone, clean before checkout
             remote {
-                github('bpatterson/emta-stuff')
+                github('bpatterson/meta-stuff')
                 refspec('+refs/pull/*:refs/remotes/origin/pr/*')
             }
             branch('\${ghprbActualCommit}')
@@ -38,6 +27,34 @@ buildFlowJob('edx-platform-bok-choy-pr-TESTING') {
                   relativeTargetDirectory('edx-platform')
             }
         }
+         git { //using git on the branch and url, clean before checkout
+            remote {
+                github('edx/testeng-ci')
+            }
+            branch('*/master')
+            browser()
+            extensions {
+                relativeTargetDirectory('testeng-ci')
+                cleanBeforeCheckout()
+            }
+        }
+/*        git { //using git on the branch and url, clone, clean before checkout
+            remote {
+                github('bpatterson/emta-stuff')
+                refspec('+refs/pull/*:refs/remotes/origin/pr/*')
+            }
+            branch('\${ghprbActualCommit}')
+            browser()
+            extensions {
+                cloneOptions {
+                    reference('\$HOME/edx-platform-clone/.git')
+                    timeout(10)
+                } 
+                  cleanBeforeCheckout()
+                  relativeTargetDirectory('edx-platform')
+            }
+        }
+*/
     }
     triggers { //trigger when change pushed to GitHub
         pullRequest {
