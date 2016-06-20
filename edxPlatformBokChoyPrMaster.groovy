@@ -24,7 +24,7 @@ buildFlowJob('edx-platform-bok-choy-pr-TESTING') {
         }
         git { //using git on the branch and url, clone, clean before checkout
             remote {
-                github('aphanse/hello-world')
+                github('bpatterson/emta-stuff')
                 refspec('+refs/pull/*:refs/remotes/origin/pr/*')
             }
             branch('\${ghprbActualCommit}')
@@ -35,7 +35,7 @@ buildFlowJob('edx-platform-bok-choy-pr-TESTING') {
                     timeout(10)
                 }
 */                cleanBeforeCheckout()
-//                relativeTargetDirectory('edx-platform')
+                  relativeTargetDirectory('edx-platform')
             }
         }
     }
