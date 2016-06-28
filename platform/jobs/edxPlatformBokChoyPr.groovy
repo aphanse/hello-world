@@ -10,8 +10,8 @@ Example secret YAML file used by this script
 publicJobConfig:
     open : true/false
     jobName : name-of-jenkins-job-to-be
-    testengUrl: testeng-github-url-segment
-    platformUrl : platform-github-url-segment
+    testengUrl: testeng-github-url-segment.git
+    platformUrl : platform-github-url-segment.git
     testengCredential : n/a
     platformCredential : n/a
     platformCloneReference : clone/.git
@@ -20,6 +20,7 @@ publicJobConfig:
     orgWhiteList : [name, name, name]
 */
 
+gitHubBaseUrl = 'http://github.com/'
 /* stdout logger */
 /* use this instead of println, because you can pass it into closures or other scripts. */
 /* TODO: Move this into JenkinsPublicConstants, as it can be shared. */
@@ -27,12 +28,6 @@ Map config = [:]
 Binding bindings = getBinding()
 config.putAll(bindings.getVariables())
 PrintStream out = config['out']
-
-stringParams = [
-    name: 'sha1',
-    description: 'Sha1 hash of branch to build. Default branch : master',
-    default: '*/master'
-]
 
 /* Environment variable (set in Seeder job config) to reference a Jenkins secret file */
 String secretFileVariable = 'EDX_PLATFORM_TEST_BOK_CHOY_PR_SECRET'
@@ -81,9 +76,8 @@ secretMap.each { jobConfigs ->
                 permissionAll('edx')
             }
         }
-
-        parameters {
-            stringParam(stringParams.name, stringParams.default, stringParams.description)
+        properties {
+              githubProjectUrl(gitHubBaseUrl + jobConfig['platformUrl'])
         }
         logRotator JENKINS_PUBLIC_LOG_ROTATOR() //Discard build after a certain amount of time
         concurrentBuild() //concurrent builds can happen
@@ -92,7 +86,7 @@ secretMap.each { jobConfigs ->
         multiscm {
             git { //using git on the branch and url, clean before checkout
                 remote {
-                        github(jobConfig['testengUrl'])
+                    url(gitHubBaseUrl + jobConfig['testengUrl'])
                     if (!jobConfig['open'].toBoolean()) {
                         credentials(jobConfig['testengCredential'])
                     }
@@ -106,7 +100,7 @@ secretMap.each { jobConfigs ->
             }
             git { //using git on the branch and url, clone, clean before checkout
                 remote {
-                    github(jobConfig['platformUrl'])
+                    url(gitHubBaseUrl+jobConfig['platformUrl'])
                     refspec('+refs/pull/*:refs/remotes/origin/pr/*')
                     if (!jobConfig['open'].toBoolean()) {
                         credentials(jobConfig['platformCredential'])
@@ -128,8 +122,7 @@ secretMap.each { jobConfigs ->
             pullRequest {
                 admins(jobConfig['admin'])
                 useGitHubHooks()
-                triggerPhrase('[jJ]enkins run bokchoy')
-                cron('H/5 * * * *')
+                triggerPhrase('jenkins run bokchoy')
                 userWhitelist(jobConfig['userWhiteList'])
                 orgWhitelist(jobConfig['orgWhiteList'])
                 extensions {
