@@ -15,6 +15,8 @@ class JenkinsPublicConstants {
     }
   }
 
+  public static final String JENKINS_PUBLIC_GITHUB_BASEURL = "http://github.com/"
+
   public static final String JENKINS_PUBLIC_WORKER = "jenkins-worker"
 
   public static final Closure JENKINS_PUBLIC_ARCHIVE_ARTIFACTS = {
@@ -79,7 +81,7 @@ class JenkinsPublicConstants {
     
     public static final String JENKINS_PUBLIC_JUNIT_REPORTS = 'edx-platform/**/nosetests.xml,edx-platform/reports/acceptance/*.xml,' +
                                                               'edx-platform/reports/quality.xml,edx-platform/reports/javascript/' +
-                                                              'javascript_xunit.xml,edx-platform/reports/bok_choy/xunit.xml,edx-platform/' +
+                                                              'javascript_xunit*.xml,edx-platform/reports/bok_choy/xunit.xml,edx-platform/' +
                                                               'reports/bok_choy/**/xunit.xml'
 
     public static final Closure JENKINS_PUBLIC_GITHUB_STATUS_PENDING = { predefinedPropsMap ->
