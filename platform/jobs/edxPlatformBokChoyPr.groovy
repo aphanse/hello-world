@@ -4,6 +4,7 @@ import hudson.model.Build
 import static org.edx.jenkins.dsl.JenkinsPublicConstants.JENKINS_PUBLIC_LOG_ROTATOR
 import static org.edx.jenkins.dsl.JenkinsPublicConstants.JENKINS_PUBLIC_PARSE_SECRET
 import static org.edx.jenkins.dsl.JenkinsPublicConstants.JENKINS_PUBLIC_JUNIT_REPORTS
+import static org.edx.jenkins.dslJenkinsPublicConstants.JENKINS_PUBLIC_GITHUB_BASEURL
 
 /*
 Example secret YAML file used by this script
@@ -20,7 +21,6 @@ publicJobConfig:
     orgWhiteList : [name, name, name]
 */
 
-gitHubBaseUrl = 'http://github.com/'
 /* stdout logger */
 /* use this instead of println, because you can pass it into closures or other scripts. */
 /* TODO: Move this into JenkinsPublicConstants, as it can be shared. */
@@ -77,7 +77,7 @@ secretMap.each { jobConfigs ->
             }
         }
         properties {
-              githubProjectUrl(gitHubBaseUrl + jobConfig['platformUrl'])
+              githubProjectUrl(JENKINS_PUBLIC_GITHUB_BASEURL + jobConfig['platformUrl'])
         }
         logRotator JENKINS_PUBLIC_LOG_ROTATOR() //Discard build after a certain amount of time
         concurrentBuild() //concurrent builds can happen
@@ -86,7 +86,7 @@ secretMap.each { jobConfigs ->
         multiscm {
             git { //using git on the branch and url, clean before checkout
                 remote {
-                    url(gitHubBaseUrl + jobConfig['testengUrl'])
+                    url(JENKINS_PUBLIC_GITHUB_BASEURL + jobConfig['testengUrl'])
                     if (!jobConfig['open'].toBoolean()) {
                         credentials(jobConfig['testengCredential'])
                     }
@@ -100,7 +100,7 @@ secretMap.each { jobConfigs ->
             }
             git { //using git on the branch and url, clone, clean before checkout
                 remote {
-                    url(gitHubBaseUrl+jobConfig['platformUrl'])
+                    url(JENKINS_PUBLIC_GITHUB_BASEURL + jobConfig['platformUrl'])
                     refspec('+refs/pull/*:refs/remotes/origin/pr/*')
                     if (!jobConfig['open'].toBoolean()) {
                         credentials(jobConfig['platformCredential'])
