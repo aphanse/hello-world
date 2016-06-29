@@ -11,8 +11,8 @@ Example secret YAML file used by this script
 publicJobConfig:
     open : true/false
     jobName : name-of-jenkins-job-to-be
-    testengUrl: testeng-github-url-segment.git
-    platformUrl : platform-github-url-segment.git
+    testengUrl: testeng-github-url-segment
+    platformUrl : platform-github-url-segment
     testengCredential : n/a
     platformCredential : n/a
     platformCloneReference : clone/.git
@@ -86,7 +86,7 @@ secretMap.each { jobConfigs ->
         multiscm {
             git { //using git on the branch and url, clean before checkout
                 remote {
-                    url(JENKINS_PUBLIC_GITHUB_BASEURL + jobConfig['testengUrl'])
+                    url(JENKINS_PUBLIC_GITHUB_BASEURL + jobConfig['testengUrl'] + '.git')
                     if (!jobConfig['open'].toBoolean()) {
                         credentials(jobConfig['testengCredential'])
                     }
@@ -100,7 +100,7 @@ secretMap.each { jobConfigs ->
             }
             git { //using git on the branch and url, clone, clean before checkout
                 remote {
-                    url(JENKINS_PUBLIC_GITHUB_BASEURL + jobConfig['platformUrl'])
+                    url(JENKINS_PUBLIC_GITHUB_BASEURL + jobConfig['platformUrl'] + '.git')
                     refspec('+refs/pull/*:refs/remotes/origin/pr/*')
                     if (!jobConfig['open'].toBoolean()) {
                         credentials(jobConfig['platformCredential'])
