@@ -49,6 +49,7 @@ try {
     out.println('Successfully parsed secret YAML file')
 }
 catch (any) {
+    out.println(any)
     out.println('Jenkins DSL: Error parsing secret YAML file')
     out.println('Exiting with error code 1')
     return 1
